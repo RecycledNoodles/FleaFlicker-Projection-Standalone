@@ -4,6 +4,8 @@ import requests
 import json
 from scipy.stats import norm
 import csv
+from datetime import datetime
+
 
 start1 = time.time()
 
@@ -156,6 +158,7 @@ class player:
                     self.projectionFF=playerJson["leaguePlayer"]["viewingProjectedPoints"]["value"] #This is the projection that fleaflicker publishes.
                 except KeyError:
                     self.projectionFF = 0
+
             self.pointRate = self.projectionFF/3600
             self.pointsScored = 0
             self.data=playerJson
@@ -238,8 +241,8 @@ class ffGame:
         self.homeTeamWinProb = 1-norm.cdf(-self.newMu/max(self.newSigma,0.0000000001))
         self.homeTeamWinPercent = round(100*self.homeTeamWinProb)
         self.awayTeamWinPercent = 100-self.homeTeamWinPercent
-        print(self.homeTeam.name, "has a", str(self.homeTeamWinPercent), "% chance of winning")
-        print(self.awayTeam.name, "has a", str(self.awayTeamWinPercent), "% chance of winning")
+        
+        return "*_" + self.homeTeam.name + "_* has a *" + str(self.homeTeamWinPercent) + "%* chance of winning" + "\n" + "*_" + self.awayTeam.name + "_* has a *" + str(self.awayTeamWinPercent)+ "%* chance of winning"
 
 
 def checkGames(games):
@@ -262,12 +265,57 @@ def checkGames(games):
 
 games={}
 checkGames(games)
-print("Current Projections")
-print("---------------------------------")
+# Game Time String
+gametime_string = 'Sunday 1pm'
+blocks = [
+        {
+            "type": "header",
+            "text": {
+                "type": "plain_text",
+                "text": ":football:  Upcoming Predictions  :football:"
+            }
+        },
+        {
+            "type": "context",
+            "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": f"*{datetime.now().strftime('%B %d, %Y')}*  |  {gametime_string}"
+                }
+            ]
+        },
+        {
+            "type": "divider"
+        }
+    ]
+
+#print("Current Projections")
+#print("---------------------------------")
+
 for item in games:
-    print("In Game Number", int(str(item)[-1]) + 1)
-    games[item].projectGame()
-    print("  ")
+    blocks.extend([
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f" :loud_sound: *{'In Game Number' + ' ' + str(int(str(item)[-1]) + 1)}* :loud_sound:"
+                }
+            },
+            {
+               "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": games[item].projectGame()
+                }
+            },
+            {
+                "type": "divider"
+            }
+        ])
+    
+    #print("In Game Number", int(str(item)[-1]) + 1)
+    #games[item].projectGame()
+    #print("  ")
 
 end = time.time()
 
@@ -278,3 +326,37 @@ print("This prediction took", end-start, "seconds to run")
 print("Of which,", start1-start, "seconds were spent importing packages")
 print("And", end-start1, "seconds were spent pinging fleaflicker and generating the prediction")
 """
+
+
+# Replace these with your actual values
+SLACK_BOT_TOKEN = 'SLACK_BOT_TOKEN_HERE'
+# #forcast Channel ID
+CHANNEL_ID = 'CHANNEL_ID_HERE'
+
+# Define headers with Authorization token
+slack_headers = {
+    'Authorization': f'Bearer {SLACK_BOT_TOKEN}',
+    'Content-Type': 'application/json'
+}
+
+
+
+# Generate the Slack blocks
+slack_blocks = blocks
+
+# Build the complete payload
+slack_payload = {
+    "channel": CHANNEL_ID,
+    "blocks": slack_blocks
+}
+
+# Post the message
+slack_response = requests.post('https://slack.com/api/chat.postMessage', headers=slack_headers, data=json.dumps(slack_payload))
+
+# Check the response
+if slack_response.status_code == 200:
+    print('Message posted successfully!')
+    print(slack_response.json())
+else:
+    print(f'Failed to post message: {slack_response.status_code}')
+    print(slack_response.json())
