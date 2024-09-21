@@ -152,7 +152,10 @@ class player:
             self.projection=0 #This is the fancier projection that will be updated in real time and used to calculate victory likelihood
             self.projectionFF = 0
             if "viewingProjectedPoints" in playerJson["leaguePlayer"]:
-                self.projectionFF=playerJson["leaguePlayer"]["viewingProjectedPoints"]["value"] #This is the projection that fleaflicker publishes.
+                try:
+                    self.projectionFF=playerJson["leaguePlayer"]["viewingProjectedPoints"]["value"] #This is the projection that fleaflicker publishes.
+                except KeyError:
+                    self.projectionFF = 0
             self.pointRate = self.projectionFF/3600
             self.pointsScored = 0
             self.data=playerJson
