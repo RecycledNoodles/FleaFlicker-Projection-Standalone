@@ -5,6 +5,10 @@ import json
 from scipy.stats import norm
 import csv
 from datetime import datetime
+import configparser
+
+config = configparser.ConfigParser()
+config.read('~/slack.env')
 
 
 start1 = time.time()
@@ -329,9 +333,9 @@ print("And", end-start1, "seconds were spent pinging fleaflicker and generating 
 
 
 # Replace these with your actual values
-SLACK_BOT_TOKEN = 'SLACK_BOT_TOKEN_HERE'
+SLACK_BOT_TOKEN = config.get('slack','BOT_TOKEN')
 # #forcast Channel ID
-CHANNEL_ID = 'CHANNEL_ID_HERE'
+CHANNEL_ID = config.get('slack','CHANNEL_ID')
 
 # Define headers with Authorization token
 slack_headers = {
