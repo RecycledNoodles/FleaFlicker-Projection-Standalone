@@ -279,7 +279,7 @@ checkGames(games)
 
 
 # Game Time String
-if sys.argv[1] == "":
+if len(sys.argv) == 1:
     gametime_string = 'Instant Prediction'
 else:
     gametime_string = sys.argv[1]
