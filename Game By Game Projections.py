@@ -5,10 +5,11 @@ import json
 from scipy.stats import norm
 import csv
 from datetime import datetime
+from pathlib import Path
 import configparser
 
 config = configparser.ConfigParser()
-configFile = r'~/slack.env'
+configFile = Path("~/slack.env)
 config.read(configFile)
 
 
