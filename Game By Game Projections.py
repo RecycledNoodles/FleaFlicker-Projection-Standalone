@@ -7,6 +7,8 @@ import csv
 from datetime import datetime
 from pathlib import Path
 import configparser
+import sys
+
 
 config = configparser.ConfigParser()
 configPath = Path().resolve().parent
@@ -274,8 +276,15 @@ def checkGames(games):
 
 games={}
 checkGames(games)
+
+
 # Game Time String
-gametime_string = 'Sunday 1pm'
+if sys.argv[1] == "":
+    gametime_string = 'Instant Prediction'
+else:
+    gametime_string = sys.argv[1]
+
+
 blocks = [
         {
             "type": "header",
