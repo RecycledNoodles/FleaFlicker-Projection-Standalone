@@ -9,7 +9,9 @@ from pathlib import Path
 import configparser
 
 config = configparser.ConfigParser()
-configFile = Path("~/slack.env").resolve()
+configPath = Path().resolve().parent
+configFileName = 'slack.env'
+configFile = configPath / configFileName
 print(configFile)
 config.read(configFile)
 
