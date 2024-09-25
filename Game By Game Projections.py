@@ -280,7 +280,7 @@ checkGames(games)
 
 # Game Time String
 if len(sys.argv) == 1:
-    gametime_string = 'Instant Prediction'
+    gametime_string = 'On-Demand Prediction'
 else:
     gametime_string = sys.argv[1]
 
