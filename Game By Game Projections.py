@@ -12,7 +12,7 @@ config = configparser.ConfigParser()
 configPath = Path().resolve().parent
 configFileName = 'slack.env'
 configFile = configPath / configFileName
-print(configFile)
+#print(configFile)
 config.read(configFile)
 
 
