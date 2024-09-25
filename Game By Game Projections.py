@@ -8,7 +8,8 @@ from datetime import datetime
 import configparser
 
 config = configparser.ConfigParser()
-config.read(r'~/slack.env')
+configFile = r'~/slack.env'
+config.read(configFile)
 
 
 start1 = time.time()
