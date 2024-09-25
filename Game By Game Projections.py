@@ -10,6 +10,7 @@ import configparser
 
 config = configparser.ConfigParser()
 configFile = Path("~/slack.env")
+print(configFile)
 config.read(configFile)
 
 
