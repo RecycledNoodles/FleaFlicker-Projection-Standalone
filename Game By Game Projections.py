@@ -374,7 +374,7 @@ slack_response = requests.post('https://slack.com/api/chat.postMessage', headers
 # Check the response
 if slack_response.status_code == 200:
     print('Message posted successfully!')
-    #print(slack_response.json())
+    print(slack_response.json())
 else:
     print(f'Failed to post message: {slack_response.status_code}')
     print(slack_response.json())
